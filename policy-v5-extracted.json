@@ -1,0 +1,19 @@
+{
+  "version": "5.0-partial",
+  "effectiveFrom": "2026-10-31",
+  "status": "draft",
+  "source": "Worked_Examples.pdf only; full Corvo_Procurement_Policy.pdf was not supplied",
+  "currency": "INR",
+  "rules": [
+    {"id":"CAPEX_FIRST","priority":10,"when":{"capex":true},"then":{"route":"CAPEX_SOURCING","decision":"SOURCING_REQUEST","supplierCount":5},"explanation":"Worked example 12 says capex is checked before contracts and value limits."},
+    {"id":"NEW_ITEM","priority":20,"when":{"itemKnown":false},"then":{"route":"NEW_ITEM_SOURCING","decision":"SOURCING_REQUEST","supplierCount":0},"explanation":"Worked example 13: item absent from master is sourced, valued at requester estimate, and not clubbed."},
+    {"id":"EMERGENCY_PO","priority":30,"when":{"urgency":"Emergency","valueLte":500000,"hasPurchaseHistory":true},"then":{"route":"EMERGENCY_PO","decision":"PO","supplierCount":1},"explanation":"Worked example 8: emergency requirement up to ₹5 lakh with purchase history may go to first preferred supplier."},
+    {"id":"SPOT_PO","priority":40,"when":{"valueLt":200000,"hasPurchaseHistory365d":true},"then":{"route":"SPOT_PO","decision":"PO","supplierCount":1},"explanation":"Worked example 7: below ₹2 lakh and bought in last year goes to first preferred supplier."},
+    {"id":"RFQ","priority":50,"when":{"valueGte":200000,"valueLt":1000000},"then":{"route":"RFQ","decision":"SOURCING_REQUEST","supplierCount":3},"explanation":"Worked example 9: ₹2 lakh to below ₹10 lakh requires RFQ with 3 suggestions."},
+    {"id":"RFP","priority":60,"when":{"valueGte":1000000},"then":{"route":"RFP","decision":"SOURCING_REQUEST","supplierCount":5},"explanation":"Worked example 11: ₹10 lakh or above requires RFP with 5 suggestions."}
+  ],
+  "notes": [
+    "Contract precedence, contract ceilings, contract-only PDFs, item matching, valuation and full rule ordering are not fully represented.",
+    "The exact source policy v5.0 must replace this partial extraction before real decisions are relied upon."
+  ]
+}

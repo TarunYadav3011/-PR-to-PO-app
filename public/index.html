@@ -1,0 +1,193 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Corvo | Procurement</title>
+    <link rel="stylesheet" href="/styles.css">
+</head>
+<body>
+    <div class="shell">
+        <aside class="sidebar">
+            <div class="brand">
+                <span class="brandmark">C</span>
+                <div>
+                    <b>corvo</b>
+                    <small>ENGINEERING</small>
+                </div>
+            </div>
+
+            <nav>
+                <button class="nav active" data-view="overview">▦ <span>Overview</span></button>
+                <button class="nav" data-view="requests">▤ <span>Buyer workspace</span></button>
+                <button class="nav" data-view="chat">✳ <span>New request</span></button>
+                <button class="nav" data-view="policy">⚖ <span>Policy management</span></button>
+                <button class="nav" data-view="batch">⇧ <span>Batch processing</span></button>
+                <button class="nav" data-view="audit">◷ <span>Audit trail</span></button>
+            </nav>
+
+            <div class="sidebar-foot">
+                <div class="avatar">PR</div>
+                <div>
+                    <b>Procurement</b>
+                    <small>Corvo Engineering</small>
+                </div>
+            </div>
+        </aside>
+
+        <main>
+            <header>
+                <div>
+                    <small class="eyebrow">PROCUREMENT OPERATIONS / CORVO ENGINEERING</small>
+                    <h1 id="pageTitle">Overview</h1>
+                </div>
+                <div class="header-right">
+                    <span class="live"><i></i> System operational</span>
+                    <span class="avatar">TY</span>
+                </div>
+            </header>
+
+            <section id="overview" class="view active">
+                <div class="welcome">
+                    <div>
+                        <p class="eyebrow light">MONDAY, NOVEMBER 16, 2026</p>
+                        <h2>Good morning, Procurement.</h2>
+                        <p>Review incoming requirements and move each one forward.</p>
+                    </div>
+                    <button class="primary" onclick="show('chat')">＋ Raise a request</button>
+                </div>
+
+                <div class="stats" id="stats"></div>
+
+                <div class="panel">
+                    <div class="panel-head">
+                        <div>
+                            <h3>Recent requirements</h3>
+                            <p>Latest employee requests and procurement decisions</p>
+                        </div>
+                        <button class="ghost" onclick="show('requests')">View workspace →</button>
+                    </div>
+                    <div id="recent"></div>
+                </div>
+
+                <div class="note">
+                    <b>Policy engine</b>
+                    <span id="policyStatus">Loading active policy…</span>
+                    <button class="ghost" onclick="show('policy')">Manage policy →</button>
+                </div>
+            </section>
+
+            <section id="requests" class="view">
+                <div class="panel">
+                    <div class="panel-head">
+                        <div>
+                            <h3>Buyer workspace</h3>
+                            <p>Review decisions, rationale and next actions.</p>
+                        </div>
+                        <button class="primary" onclick="show('chat')">＋ New request</button>
+                    </div>
+                    <div id="allRequests"></div>
+                </div>
+            </section>
+
+            <section id="chat" class="view">
+                <div class="chat-layout">
+                    <div class="chat-main panel">
+                        <div class="panel-head">
+                            <div>
+                                <h3>Purchase assistant</h3>
+                                <p>Describe what you need in plain language.</p>
+                            </div>
+                            <span class="pill green">● Ready</span>
+                        </div>
+
+                        <div id="messages" class="messages">
+                            <div class="bubble bot">
+                                Hi! I can help raise a purchase request. Tell me what you need,
+                                how many, which plant, and when you need it. I’ll ask for anything
+                                missing before submitting.
+                            </div>
+                        </div>
+
+                        <form id="chatForm" class="composer">
+                            <input id="chatInput" placeholder="e.g. Need 200 nitrile gloves for Chakan by 25 Nov…" autocomplete="off">
+                            <button class="primary">Send ↑</button>
+                        </form>
+
+                        <div class="hint">The assistant will confirm details before creating the request.</div>
+                    </div>
+
+                    <div class="side-help panel">
+                        <h3>Request checklist</h3>
+                        <p>To submit a complete request, include:</p>
+                        <ul>
+                            <li>Item or service description</li>
+                            <li>Quantity and unit</li>
+                            <li>Plant (PUN1 or CHK1)</li>
+                            <li>Need-by date</li>
+                            <li>Urgency, if exceptional</li>
+                            <li>Estimated unit price for new items</li>
+                        </ul>
+                        <div class="tip">
+                            Not sure of the item code? Describe the item. The buyer can resolve uncertain matches.
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <section id="policy" class="view">
+                <div class="panel">
+                    <div class="panel-head">
+                        <div>
+                            <h3>Policy versions</h3>
+                            <p>Upload a structured policy, review its impact, then approve activation.</p>
+                        </div>
+                        <span class="pill amber">Policy as data</span>
+                    </div>
+
+                    <div id="policyVersions"></div>
+
+                    <div class="uploadbox">
+                        <h3>Upload policy version</h3>
+                        <p>
+                            Starter accepts JSON policy data with <code>version</code>,
+                            <code>effectiveFrom</code>, and ordered <code>rules[]</code>.
+                            A PDF-to-rules extraction and human review step is required for production.
+                        </p>
+                        <input type="file" id="policyFile" accept=".json,application/json">
+                        <button class="primary" id="uploadPolicy">Upload &amp; preview</button>
+                        <div id="policyPreview"></div>
+                    </div>
+                </div>
+            </section>
+
+            <section id="batch" class="view">
+                <div class="panel">
+                    <h3>Process PR batch</h3>
+                    <p>Upload the sample-format CSV to evaluate each PR line under the active policy.</p>
+                    <div class="uploadbox">
+                        <input type="file" id="batchFile" accept=".csv,text/csv" >
+                        <button class="primary" id="processBatch">Process and export decisions</button>
+                        <p id="batchStatus"></p>
+                    </div>
+                </div>
+            </section>
+
+            <section id="audit" class="view">
+                <div class="panel">
+                    <div class="panel-head">
+                        <div>
+                            <h3>Audit trail</h3>
+                            <p>Every request, approval, override and policy action.</p>
+                        </div>
+                    </div>
+                    <div id="auditRows"></div>
+                </div>
+            </section>
+        </main>
+    </div>
+
+    <script src="/app.js"></script>
+</body>
+</html>
